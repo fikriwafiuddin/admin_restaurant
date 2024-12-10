@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body class="bg-gray-100">
+    <div class="flex h-screen box-border">
+      <!-- Sidebar -->
+      <div class="w-64 bg-white shadow-md">
+        <div class="p-4">
+          <h1 class="text-2xl font-bold text-center">Dashboard</h1>
+        </div>
+        <nav class="mt-6">
+          <a href="#" class="block py-2.5 px-4 text-gray-700 hover:bg-gray-200" id="homeBtn">Home</a>
+          <a href="#" class="block py-2.5 px-4 text-gray-700 hover:bg-gray-200" id="profileBtn">Produk</a>
+          <a href="#" class="block py-2.5 px-4 text-gray-700 hover:bg-gray-200" id="settingsBtn">Staff</a>
+          <a href="#" class="block py-2.5 px-4 text-gray-700 hover:bg-gray-200" id="reportBtn">Laporan</a>
+          <a href="index.html" class="block py-2.5 px-4 text-gray-700 hover:bg-gray-200">Keluar</a>
+        </nav>
+      </div>
+
+      <!-- Main Content -->
+      <div class="flex-1 p-6 overflow-y-auto">
+        <header class="flex items-center justify-between">
+          <h2 class="text-3xl font-semibold" id="mainHeader">Dashboard</h2>
+        </header>
+
+        <main class="mt-6">
+          <!-- Default Home Section -->
+          <div id="homeContent" class="content-section">
+            <article
+              class="flex flex-col gap-4 rounded-lg border border-gray-100 bg-white p-6"
+            >
+              <div
+                class="inline-flex gap-2 self-end rounded bg-green-100 p-1 text-green-600"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="size-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                  />
+                </svg>
+                <span class="text-xs font-medium"> 64.28% </span>
+              </div>
+
+              <div>
+                <strong class="block text-sm font-medium text-gray-500">
+                  Pendapatan
+                </strong>
+
+                <p>
+                  <span class="text-2xl font-medium text-gray-900">
+                    Rp. 69,000,000
+                  </span>
+                  <span class="text-xs text-gray-500"> dari Rp. 42,000,000 </span>
+                </p>
+              </div>
+            </article>
+            <div class="bg-white p-4 mt-3 rounded shadow">
+              <canvas id="incomeChart" height="100"></canvas>
+            </div>
+          </div>
+
+           <!-- Produk Section -->
+           <div id="productContent" class="content-section hidden">
+            <h2 class="text-xl font-bold mb-4">Daftar Produk</h2>
+            <div class="mb-4">
+              <button id="addMenuBtn" class="bg-green-500 text-white px-4 py-2 rounded">Tambah Menu</button>
+            </div>
+            <table class="table-auto w-full bg-white border rounded shadow">
+              <thead class="bg-gray-100 border-b">
+                <tr>
+                  <th class="px-4 py-2">Nama Menu</th>
+                  <th class="px-4 py-2">Harga (Rp)</th>
+                  <th class="px-4 py-2">Deskripsi</th>
+                  <th class="px-4 py-2">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="productTable">
+                <!-- Menu items injected dynamically -->
+              </tbody>
+            </table>
+          
+            <!-- Tambah/Edit Form -->
+            <div id="menuForm" class="mt-6 hidden bg-gray-50 p-4 border rounded shadow">
+              <h3 class="text-lg font-bold mb-2" id="menuFormTitle">Tambah Menu</h3>
+              <form id="menuFormElement">
+                <div class="mb-4">
+                  <label for="menuNameInput" class="block text-sm font-medium">Nama Produk</label>
+                  <input type="text" id="menuNameInput" class="w-full p-2 border rounded" required>
+                </div>
+                <div class="mb-4">
+                  <label for="menuPriceInput" class="block text-sm font-medium">Harga (Rp)</label>
+                  <input type="number" id="menuPriceInput" class="w-full p-2 border rounded" min="0" required>
+                </div>
+                <div class="mb-4">
+                  <label for="menuDescriptionInput" class="block text-sm font-medium">Deskripsi</label>
+                  <textarea id="menuDescriptionInput" class="w-full p-2 border rounded" required></textarea>
+                </div>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Simpan</button>
+              </form>
+            </div>
+          
+            <!-- Data Penjualan -->
+            <h2 class="text-xl font-bold mt-8">Data Penjualan Barang</h2>
+            <div class="bg-white p-4 border rounded shadow">
+              <canvas id="salesChart" height="100"></canvas>
+            </div>
+          </div>
+
+          <!-- Pengaturan Section -->
+          <div id="settingsContent" class="content-section hidden">
+            <h2 class="text-xl font-bold mb-4">Daftar Staff dan Shift</h2>
+            <table class="table-auto w-full bg-white border rounded shadow">
+              <thead class="bg-gray-100 border-b">
+                <tr>
+                  <th class="px-4 py-2">Nama Staff</th>
+                  <th class="px-4 py-2">Waktu Shift</th>
+                  <th class="px-4 py-2">Waktu Check-In</th>
+                  <th class="px-4 py-2">Status</th>
+                </tr>
+              </thead>
+              <tbody id="staffTable">
+                <!-- Rows injected dynamically -->
+                <tr>
+                  <td class="px-4 py-2">Isagi</td>
+                  <td class="px-4 py-2">12:00 - 20:00</td>
+                  <td class="px-4 py-2">12:00</td>
+                  <td class="px-4 py-2"><span class="text-green-500 font-bold">Tepat Waktu</span></td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2">Barou</td>
+                  <td class="px-4 py-2">10:00 - 18:00</td>
+                  <td class="px-4 py-2">10:15</td>
+                  <td class="px-4 py-2"><span class="text-red-500 font-bold">Terlambat</span></td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2">Kaiser</td>
+                  <td class="px-4 py-2">08:00 - 16:00</td>
+                  <td class="px-4 py-2">Belum Check-In</td>
+                  <td class="px-4 py-2"><span class="text-gray-500 font-bold">Belum Check-In</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Laporan Section -->
+          <div id="reportContent" class="content-section hidden">
+            <h2 class="text-xl font-bold mb-4">Laporan Bulanan</h2>
+          
+            <!-- Tabel Pendapatan dan Pengeluaran -->
+            <table class="table-auto w-full bg-white border rounded shadow">
+              <thead class="bg-gray-100 border-b">
+                <tr>
+                  <th class="px-4 py-2">Bulan</th>
+                  <th class="px-4 py-2">Pendapatan (Rp)</th>
+                  <th class="px-4 py-2">Pengeluaran (Rp)</th>
+                </tr>
+              </thead>
+              <tbody id="reportTable">
+                <!-- Rows injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+    <script>
+      // Chart.js Initialization
+      const ctx = document.getElementById("incomeChart").getContext("2d");
+      const incomeChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: ["Agustus", "September", "Oktober", "November"],
+          datasets: [
+            {
+              label: "Pendapatan (IDR)",
+              data: [39000000, 50000000, 42000000, 69000000],
+              borderColor: "rgba(75, 192, 192, 1)",
+              backgroundColor: "rgba(75, 192, 192, 0.2)",
+              borderWidth: 2,
+              fill: true,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: "Pendapatan (IDR)" },
+            },
+            x: { title: { display: true, text: "Bulan" } },
+          },
+        },
+      });
+
+      // Content Switching Logic
+      const sections = document.querySelectorAll(".content-section");
+      const mainHeader = document.getElementById("mainHeader");
+
+      document.getElementById("homeBtn").addEventListener("click", () => {
+        switchContent("homeContent", "Selamat Datang di Dashboard");
+      });
+
+      document.getElementById("profileBtn").addEventListener("click", () => {
+        switchContent("productContent", "Produk");
+      });
+
+      document.getElementById("settingsBtn").addEventListener("click", () => {
+        switchContent("settingsContent", "Pengaturan");
+      });
+
+      document.getElementById("reportBtn").addEventListener("click", () => {
+        switchContent("reportContent", "Laporan");
+      });
+
+      function switchContent(sectionId, headerText) {
+        sections.forEach((section) => section.classList.add("hidden"));
+        document.getElementById(sectionId).classList.remove("hidden");
+        mainHeader.textContent = headerText;
+      }
+            // Menu data
+            const menuItems = [
+        { name: "Wagyu Premium", price: 150000, description: "Daging wagyu berkualitas premium" },
+        { name: "Matcha Latte", price: 35000, description: "Minuman latte dengan rasa matcha" },
+        { name: "Choco Lava", price: 45000, description: "Kue cokelat dengan lava cair" },
+        { name: "Carbonara Truffle", price: 95000, description: "Pasta carbonara dengan aroma truffle" },
+        { name: "Berry Bliss", price: 40000, description: "Minuman buah beri yang menyegarkan" },
+        // Add other menu items here...
+      ];
+
+      const productTable = document.getElementById("productTable");
+  const menuForm = document.getElementById("menuForm");
+  const menuFormTitle = document.getElementById("menuFormTitle");
+  const menuNameInput = document.getElementById("menuNameInput");
+  const menuPriceInput = document.getElementById("menuPriceInput");
+  const menuDescriptionInput = document.getElementById("menuDescriptionInput");
+
+  // Populate Product Table
+  function populateTable() {
+    productTable.innerHTML = "";
+    menuItems.forEach((item, index) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td class="px-4 py-2">${item.name}</td>
+        <td class="px-4 py-2">Rp ${item.price}</td>
+        <td class="px-4 py-2">${item.description}</td>
+        <td class="px-4 py-2">
+          <button class="bg-yellow-500 text-white px-2 py-1 rounded" onclick="editProduct(${index})">Edit</button>
+          <button class="bg-red-500 text-white px-2 py-1 rounded" onclick="deleteProduct(${index})">Hapus</button>
+        </td>
+      `;
+      productTable.appendChild(row);
+    });
+  }
+
+  populateTable();
+
+  // Show Add Menu Form
+  document.getElementById("addMenuBtn").addEventListener("click", () => {
+    menuFormTitle.textContent = "Tambah Menu";
+    menuNameInput.value = "";
+    menuPriceInput.value = "";
+    menuDescriptionInput.value = "";
+    menuForm.classList.remove("hidden");
+
+    menuFormElement.onsubmit = (e) => {
+      e.preventDefault();
+      menuItems.push({
+        name: menuNameInput.value,
+        price: parseInt(menuPriceInput.value, 10),
+        description: menuDescriptionInput.value,
+      });
+      menuForm.classList.add("hidden");
+      populateTable();
+    };
+  });
+
+  // Edit Product
+  function editProduct(index) {
+    const product = menuItems[index];
+    menuFormTitle.textContent = "Edit Menu";
+    menuNameInput.value = product.name;
+    menuPriceInput.value = product.price;
+    menuDescriptionInput.value = product.description;
+    menuForm.classList.remove("hidden");
+
+    menuFormElement.onsubmit = (e) => {
+      e.preventDefault();
+      product.name = menuNameInput.value;
+      product.price = parseInt(menuPriceInput.value, 10);
+      product.description = menuDescriptionInput.value;
+      menuForm.classList.add("hidden");
+      populateTable();
+    };
+  }
+
+  // Delete Product
+  function deleteProduct(index) {
+    menuItems.splice(index, 1);
+    populateTable();
+  }
+
+      // Sales Chart
+      const salesCtx = document.getElementById("salesChart").getContext("2d");
+      new Chart(salesCtx, {
+        type: "bar",
+        data: {
+          labels: menuItems.map((item) => item.name),
+          datasets: [
+            {
+              label: "Jumlah Penjualan",
+              data: [50, 40, 60, 70, 30], // Example data
+              backgroundColor: "rgba(54, 162, 235, 0.6)",
+            },
+          ],
+        },
+      });
+
+      const reportData = [
+    { month: "Agustus", income: 39000000, expense: 10000000 },
+    { month: "September", income: 50000000, expense: 12000000 },
+    { month: "Oktober", income: 42000000, expense: 15000000 },
+    { month: "November", income: 69000000, expense: 13000000 }
+  ];
+
+  const reportTable = document.getElementById("reportTable");
+
+  // Populate Report Table
+  function populateReportTable() {
+    reportTable.innerHTML = "";
+    reportData.forEach((data) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td class="px-4 py-2">${data.month}</td>
+        <td class="px-4 py-2">Rp ${data.income.toLocaleString()}</td>
+        <td class="px-4 py-2">Rp ${data.expense.toLocaleString()}</td>
+      `;
+      reportTable.appendChild(row);
+    });
+  }
+  populateReportTable();
+    </script>
+  </body>
+</html>
